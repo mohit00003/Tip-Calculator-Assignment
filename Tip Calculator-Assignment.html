@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+	<title>Tip Calculator</title>
+
+	<style>
+
+		main{
+
+				height: 100vh ;
+				background-image: linear-gradient(to right top, #BC8F8F, #005d7a, #CD853F, #D2B48C,#008B8B);
+				display: flex;flex-direction: column;
+				justify-content: center;align-items: center;
+			}
+
+		div{
+
+				max-width: 500px; height: auto;
+				background-color: #D2B48C;
+				padding: 40px;
+				box-shadow: 1px 1px 15px 3px #2d3436;
+			}
+
+		h1{
+
+				margin-bottom: 10px;
+				text-shadow: 1px 2px 1px white;
+			}
+
+		label{
+
+				display: block;
+				margin-top: 15px;
+			}
+
+		input{
+
+				width: 385px;
+				padding: 5px 5px;
+			}
+
+		select{
+
+				width: 400px;
+				padding: 5px 0;
+			}
+
+		button{
+
+				border-radius: 10px;
+				padding: 15px 30px;
+				font-size: 0.8rem;
+				text-transform: uppercase;
+				border;none;
+				background: #DCDCDC;
+				box-shadow: 1px 1px 5px 1px #696969;
+	            margin-top: 30px;
+	            margin-left: 40px;
+	            marker-mid: 20px;
+			}
+
+	</style>
+
+</head>
+	<body>
+		<main>
+	 		<div>
+
+		 		<h1 align="center">Tip Calculator</h1><br>
+
+		 		<select id="currency">
+		 			<option selected value="">--Select Currency--</option>
+				</select>
+
+		 		<label>Bill Amount</label>
+		 		<input type="Number" name="" id="bill_amount"><br>
+
+		        <label for="quality">Service Quality</label>
+		        <select id="quality">
+			        <option selected value="0">--Choose--</option>
+			        <option value="30">30% - Outstanding</option>
+			        <option value="20">20% - Good</option>
+			        <option value="15">15% - It was ok</option>
+			        <option value="10">10% - Bad</option>
+			        <option value="5">5% - Terrible</option>
+		        </select><br>
+
+		        <label>How Many People Sharing The Bill</label>
+		        <input type="number" id="no_people"><br>
+
+		 		<label>Tip Amount</label>
+		 		<input type="text" name="" id="tip_amount" disabled=""><br>
+
+		 		<label>Total Amount</label>
+		 		<input type="text" name="" id="total_amount" disabled=""><br>
+
+		        <label>Total Amount Per Person </label>
+		        <input type="text" id="perPeople" disabled><br>
+
+		        <button onclick="totcalcy()">Calculate</button>
+		        <button id="button">Reset</button>
+		        
+	 	    </div>
+		</main>
+
+		<script>
+
+	 	    const totcalcy = () => {
+	 	    let symbols = new Map([
+	 	    	['Indian Rupee', '₹'],['Canada Dollar', '$'],['Japanese Yen', '¥'],
+	 	    	['Australian Dollar','$'],['Bangladeshi Taka', '৳'],['Chinese Yuan', '¥'],
+	 	    	['Euro', '€'],['German Mark', 'DM'],['Russian Ruble', '₽'],['Pakistani Rupee', '₨'],
+	 	    	['North Korean Won', '₩'],['Saudi Riyal', ' SAR'], ['South African Rand', 'R'],
+	 	    	['Swedish Krona', 'kr'],['United Arab Emirates Dirham', '.إ ']
+	 	    	])
+
+	 	    let curType = document.getElementById('currency').value;
+	 		let amount = document.getElementById('bill_amount').value;
+	 		let percentage=document.getElementById('quality').value;
+	        let people=document.getElementById('no_people').value;  
+
+	 		if(curType == ""){
+	 			alert("Please select the currency type first!")
+		 	} 
+		 	else if(amount == 0 || percentage == 0){
+             	alert("Please enter all the field first!");
+            }
+            else if(people <= 0){
+            	alert("People value should be more than or equal to 1!");
+            }
+	 		else{
+	 			let tip=amount * (percentage/100);
+		 		let total=tip + Number(amount);
+		        let perPeople1= total / people;
+
+	 			tip = symbols.get(curType)+" "+tip.toFixed(2);
+	 			total = symbols.get(curType)+" "+total.toFixed(2);
+	            perPeople1 = symbols.get(curType)+" "+perPeople1.toFixed(2);
+
+	 			document.getElementById('tip_amount').value=tip;
+	 			document.getElementById('total_amount').value=total;
+	            document.getElementById('perPeople').value=perPeople1;
+	 		}
+	 		};
+	   
+		    let btnClear = document.getElementById('button');
+		    let inputs = document.querySelectorAll('input');
+
+		    btnClear.addEventListener('click' , () => {
+		    	inputs.forEach(input => input.value = '');
+		    });
+
+		    var Calcurrency=["Indian Rupee","Canada Dollar", "Japanese Yen","Australian Dollar",
+			"Bangladeshi Taka","Chinese Yuan","Euro","German Mark","Russian Ruble","Pakistani Rupee",
+			"North Korean Won","Saudi Riyal","South African Rand","Swedish Krona","United Arab Emirates Dirham"];
+
+			$(document).ready(function()
+			{
+				$("#currency").select2({
+					data:Calcurrency
+				});
+			});
+
+		    $("#button").click(function (e) { 	
+		    	$('#quality').prop('selectedIndex',0);
+		    	$('#currency').empty();
+    			$('#currency').append('<option selected value="">--Select Currency--</option>');
+    			$("#currency").select2({
+					data:Calcurrency
+				});
+			}); 
+		  
+		</script>
+	</body>
+</html>
